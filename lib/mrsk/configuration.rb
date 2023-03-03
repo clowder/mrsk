@@ -159,7 +159,8 @@ class Mrsk::Configuration
       ssh_options: ssh_options,
       builder: raw_config.builder,
       accessories: raw_config.accessories,
-      healthcheck: healthcheck
+      healthcheck: healthcheck,
+      traefik: raw_config.traefik
     }.compact
   end
 

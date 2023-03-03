@@ -23,7 +23,7 @@ env:
     - RAILS_MASTER_KEY
 ```
 
-Then edit your `.env` file to add your registry password as `MRSK_REGISTRY_PASSWORD` (and your `RAILS_MASTER_KEY` for production with a Rails app). 
+Then edit your `.env` file to add your registry password as `MRSK_REGISTRY_PASSWORD` (and your `RAILS_MASTER_KEY` for production with a Rails app).
 
 Now you're ready to deploy to the servers:
 
@@ -99,9 +99,9 @@ If you need separate env variables for different destinations, you can set them 
 
 #### bitwarden as a secret store
 
-If you are using open source secret store like bitwarden, you can create `.env.erb` as a template which looks up the secrets. 
+If you are using open source secret store like bitwarden, you can create `.env.erb` as a template which looks up the secrets.
 
-You can store `SOME_SECRET` in a secure note in bitwarden vault. 
+You can store `SOME_SECRET` in a secure note in bitwarden vault.
 
 ```
 $ bw list items --search SOME_SECRET | jq
@@ -140,7 +140,7 @@ SOME_SECRET=<%= `bw get notes 123123123-1232-4224-222f-234234234234 --session #{
 <% else raise ArgumentError, "session_token token missing" end %>
 ```
 
-Then everyone deploying the app can run `mrsk envify` and mrsk will generate `.env` 
+Then everyone deploying the app can run `mrsk envify` and mrsk will generate `.env`
 
 
 ### Using another registry than Docker Hub
@@ -353,6 +353,15 @@ traefik:
 ```
 
 This will start the traefik container with `--accesslog=true accesslog.format=json`.
+
+### Customizing Traefik's port
+
+Traefik listens for incoming connection on port 80 of the host machine. It can be configured to listen on a alternative port:
+
+```yaml
+traefik:
+  host_port: 8080
+```
 
 ### Configuring build args for new images
 
