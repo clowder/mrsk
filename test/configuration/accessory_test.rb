@@ -40,6 +40,11 @@ class ConfigurationAccessoryTest < ActiveSupport::TestCase
           "volumes" => [
             "/var/lib/redis:/data"
           ]
+        },
+        "traefik" => {
+          "image" => "traefik:latest",
+          "host" => "1.1.1.7",
+          "ports" => ["80", "443"]
         }
       }
     }
@@ -50,11 +55,6 @@ class ConfigurationAccessoryTest < ActiveSupport::TestCase
   test "service name" do
     assert_equal "app-mysql", @config.accessory(:mysql).service_name
     assert_equal "app-redis", @config.accessory(:redis).service_name
-  end
-
-  test "port" do
-    assert_equal "3306:3306", @config.accessory(:mysql).port
-    assert_equal "6379:6379", @config.accessory(:redis).port
   end
 
   test "host" do
@@ -99,6 +99,12 @@ class ConfigurationAccessoryTest < ActiveSupport::TestCase
 
     assert_match "This was dynamically expanded", @config.accessory(:mysql).files.keys[2].read
     assert_match "%", @config.accessory(:mysql).files.keys[2].read
+  end
+
+  test "port args" do
+    assert_equal ["--publish", "3306:3306"], @config.accessory(:mysql).publish_args
+    assert_equal ["--publish", "6379:6379"], @config.accessory(:redis).publish_args
+    assert_equal ["--publish", "80:80", "--publish", "443:443"], @config.accessory(:traefik).publish_args
   end
 
   test "directories" do

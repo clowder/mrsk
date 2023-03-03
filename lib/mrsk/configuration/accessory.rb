@@ -1,5 +1,5 @@
 class Mrsk::Configuration::Accessory
-  delegate :argumentize, :argumentize_env_with_secrets, to: Mrsk::Utils
+  delegate :argumentize, :argumentize_env_with_secrets, :expand_port, to: Mrsk::Utils
 
   attr_accessor :name, :specifics
 
@@ -17,14 +17,6 @@ class Mrsk::Configuration::Accessory
 
   def host
     specifics["host"] || raise(ArgumentError, "Missing host for accessory")
-  end
-
-  def port
-    if specifics["port"].to_s.include?(":")
-      specifics["port"]
-    else
-      "#{specifics["port"]}:#{specifics["port"]}"
-    end
   end
 
   def labels
@@ -63,6 +55,16 @@ class Mrsk::Configuration::Accessory
 
   def volume_args
     argumentize "--volume", volumes
+  end
+
+  def ports
+    (specifics.fetch("ports", []) + Array(specifics["port"])).map do |port|
+      expand_port(port)
+    end
+  end
+
+  def publish_args
+    argumentize "--publish", ports
   end
 
   private

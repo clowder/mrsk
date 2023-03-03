@@ -395,6 +395,16 @@ accessories:
     port: "36379:6379"
     volumes:
       - /var/lib/redis:/data
+  caddy:
+    image: caddy
+    host: 1.1.1.5
+    ports:
+      - 80
+      - 443
+    files:
+      - config/Caddyfile:/etc/caddy/Caddyfile
+    directories:
+      - data:/data
 ```
 
 Now run `mrsk accessory start mysql` to start the MySQL server on 1.1.1.3. See `mrsk accessory` for all the commands possible.

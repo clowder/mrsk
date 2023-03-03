@@ -27,4 +27,12 @@ module Mrsk::Utils
   def redact(arg) # Used in execute_command to hide redact() args a user passes in
     arg.to_s.extend(SSHKit::Redaction) # to_s due to our inability to extend Integer, etc
   end
+
+  def expand_port(port)
+    if port.to_s.include?(":")
+      port
+    else
+      "#{port}:#{port}"
+    end
+  end
 end
